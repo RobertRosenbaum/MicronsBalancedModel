@@ -1,7 +1,7 @@
 import numpy as np
 
 # Time duration and step size of sim in ms
-T=5000
+T=20000
 dt=.1
 time=np.arange(0,T,dt)
 Nt=len(time)
@@ -9,8 +9,8 @@ Tburn=500
 Nburn=int(Tburn/dt)
 
 # Number of E and I neurons in network
-Ne = 2000
-Ni = 500
+Ne = 4000
+Ni = 1000
 Ns=[Ne,Ni]
 N = Ne+Ni
 
@@ -44,13 +44,13 @@ Xmf = np.array([.036,.027])
 # Baseline external input to each neuron
 X0 = Xmf*np.sqrt(N)
 
-# Compute balanced rates for E and I neurons
+# Compute balanced rates for E and I neurons.
+# This gives a rough approx to the actual rates
+# if the network is approximately balanced.
 rBal = -np.linalg.inv(Wmf)@Xmf
-print('rBal = ',1000*rBal,'Hz')
 
 # Stimulus params
-StimDim = 5
+StimDim = 10
 taustim = 100.0
-sigmastim = X0.mean()/5.0
-
+sigmastim = X0.mean()/20.0
 
