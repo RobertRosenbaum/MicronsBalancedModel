@@ -5,7 +5,7 @@ T=20000
 dt=.1
 time=np.arange(0,T,dt)
 Nt=len(time)
-Tburn=500
+Tburn=2000
 Nburn=int(Tburn/dt)
 
 # Number of E and I neurons in network
@@ -50,7 +50,7 @@ X0 = Xmf*np.sqrt(N)
 rBal = -np.linalg.inv(Wmf)@Xmf
 
 # Stimulus params
-StimDim = 10
-taustim = 100.0
-sigmastim = X0.mean()/20.0
+StimDim = 5
+taustim = 30.0
+sigmastim = X0.mean()/4.0
 
