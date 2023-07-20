@@ -1,5 +1,7 @@
 import numpy as np
 
+print('Warning: Newer versions of notebook files do not call this file.')
+
 # Time duration and step size of sim in ms
 T=20000
 dt=.1
@@ -52,5 +54,5 @@ rBal = -np.linalg.inv(Wmf)@Xmf
 # Stimulus params
 StimDim = 5
 taustim = 30.0
-sigmastim = X0.mean()/4.0
+sigmastim = X0.mean()/10.0
 
