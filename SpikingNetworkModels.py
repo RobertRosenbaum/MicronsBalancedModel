@@ -30,6 +30,7 @@ def EIFNetworkSim(J,Jx,X,X0,Ne,NeuronParameters,tau,Nt,dt,maxns,Ierecord):
   X0i=X0[1]
 
   Ve=np.random.rand(Ne)*(VT-Vre)+Vre
+  print('Ve0 ',Ve[0])
   Vi=np.random.rand(Ni)*(VT-Vre)+Vre
   Iee=np.zeros(Ne)
   Iei=np.zeros(Ne)
