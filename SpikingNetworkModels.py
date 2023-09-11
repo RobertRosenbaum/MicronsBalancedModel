@@ -49,6 +49,7 @@ def EIFNetworkSim(J,Jx,X,X0,Ne,NeuronParameters,tau,Nt,dt,maxns,Ierecord):
       Iex=Jex@X[:,i]+X0e
       Iix=Jix@X[:,i]+X0i
 
+
       # Euler update to V
       Ve=Ve+(dt/Cm)*(Iee+Iei+Iex+gL*(EL-Ve)+DeltaT*np.exp((Ve-VT)/DeltaT))
       Vi=Vi+(dt/Cm)*(Iie+Iii+Iix+gL*(EL-Vi)+DeltaT*np.exp((Vi-VT)/DeltaT))
