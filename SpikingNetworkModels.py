@@ -1,12 +1,18 @@
+# This file contains implementations of recurrent spiking network models
+
 import numpy as np
 import matplotlib.pyplot as plt
 from time import time as tm
 
 # E-I recurrent EIF spiking network with current-based stimulus input
 def EIFNetworkSim(J,Jx,X,X0,Ne,NeuronParameters,tau,Nt,dt,maxns,Ierecord):
+
+  # N=Total number of neurons in network
+  # Ni=number of inhibitory
   N=len(J)
   Ni=N-Ne
 
+  # Get sub-network connectivity between cell types
   Jee=J[:Ne,:Ne]
   Jei=J[:Ne,Ne:]
   Jie=J[Ne:,:Ne]
@@ -14,6 +20,7 @@ def EIFNetworkSim(J,Jx,X,X0,Ne,NeuronParameters,tau,Nt,dt,maxns,Ierecord):
   Jex=Jx[:Ne,:]
   Jix=Jx[Ne:,:]
 
+  # EIF Neuron parameters
   Cm=NeuronParameters['Cm']
   gL=NeuronParameters['gL']
   EL=NeuronParameters['EL']
@@ -23,12 +30,15 @@ def EIFNetworkSim(J,Jx,X,X0,Ne,NeuronParameters,tau,Nt,dt,maxns,Ierecord):
   DeltaT=NeuronParameters['DeltaT']
   VT=NeuronParameters['VT']
 
+  # Synaptic time constants
   taue=tau[0]
   taui=tau[1]
 
+  # Baseline (time-constant) external input
   X0e=X0[0]
   X0i=X0[1]
 
+  # Initialize membrane potentials and synaptic currents
   Ve=np.random.rand(Ne)*(VT-Vre)+Vre
   Vi=np.random.rand(Ni)*(VT-Vre)+Vre
   Iee=np.zeros(Ne)
@@ -36,19 +46,25 @@ def EIFNetworkSim(J,Jx,X,X0,Ne,NeuronParameters,tau,Nt,dt,maxns,Ierecord):
   Iie=np.zeros(Ni)
   Iii=np.zeros(Ni)
 
+  # Number of neurons from which to record V. Initialize recorded V
   Nerecord=len(Ierecord)
   VeRec=np.zeros((Nt,Nerecord))
 
+  # Number of exc and inh spikes so far is zero
   nespike=0
   nispike=0
+  # Flag if there are too many spikes
   TooManySpikes=False
+  # Initialize spike train arrays with -1's (interpreted as nulls)
+  # and maximum number of allowed spikes
   se=-1.0+np.zeros((2,maxns))
   si=-1.0+np.zeros((2,maxns))
+  # Time loop
   for i in range(Nt):
+
       # External inputs
       Iex=Jex@X[:,i]+X0e
       Iix=Jix@X[:,i]+X0i
-
 
       # Euler update to V
       Ve=Ve+(dt/Cm)*(Iee+Iei+Iex+gL*(EL-Ve)+DeltaT*np.exp((Ve-VT)/DeltaT))
@@ -106,14 +122,14 @@ def EIFNetworkSim(J,Jx,X,X0,Ne,NeuronParameters,tau,Nt,dt,maxns,Ierecord):
       Iie=Iie-dt*Iie/taue
       Iii=Iii-dt*Iii/taui
 
+      # Record V
       VeRec[i,:]=Ve[Ierecord]
-
 
 
   return se,si,VeRec
 
 
-# E-I recurrent EIF spiking network with current-based stimulus input
+# E-I recurrent EIF spiking network with current-based stimulus input and membrane noise
 def EIFNetworkSimWithNoise(J,Jx,X,X0,Ne,NeuronParameters,tau,Nt,dt,maxns,Ierecord,sigmav):
   N=len(J)
   Ni=N-Ne
